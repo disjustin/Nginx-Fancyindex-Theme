@@ -140,33 +140,27 @@ h1 {
 }
 
 /* =========================
-   Top toolbar: spacing + theme toggles
+   Top toolbar: search + spacing + theme toggles
    ========================= */
 .top-toolbar {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: center;
         padding: 0.5rem 1rem;
         margin-bottom: 0.5rem;
+        gap: 0.5rem;
 }
 
-/* =========================
-   Directory header: search container
-   ========================= */
-.directory-controls {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.75rem;
-        margin-bottom: 1.5rem;
+.toolbar-search {
+        margin-right: auto;
 }
 
-/* Arrange controls horizontally on wider screens */
-@media (min-width: 720px) {
-        .directory-controls {
-                flex-direction: row;
-                justify-content: center;
-        }
+.toolbar-search input {
+        width: clamp(10rem, 30vw, 20rem);
+        height: 2rem;
+        padding: 0 0.6rem;
+        font-size: 0.875rem;
+        margin: 0;
 }
 
 /* =========================
@@ -585,6 +579,10 @@ footer a {
         gap: 1rem;
         margin: 2rem 0;
         padding: 1rem;
+}
+
+.pagination-top {
+        margin-top: 0;
 }
 
 .pagination-info {

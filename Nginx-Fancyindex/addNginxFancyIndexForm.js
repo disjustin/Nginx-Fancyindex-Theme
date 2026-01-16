@@ -22,16 +22,25 @@
         const form = document.createElement('form');
         const input = document.createElement('input');
         const heading = document.querySelector('h1');
-        const controls = document.createElement('div');
         const themeToggle = document.createElement('button');
         const body = document.body;
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
         const table = document.querySelector('#list');
         const tbody = table?.querySelector('tbody');
 
-        // Create top toolbar for theme and spacing toggles
+        // Create top toolbar for search, spacing, and theme toggles
         const toolbar = document.createElement('div');
         toolbar.className = 'top-toolbar';
+
+        // Search input (added to toolbar)
+        input.name = 'filter';
+        input.id = 'search';
+        input.type = 'search';
+        input.placeholder = 'Search...';
+        input.setAttribute('aria-label', 'Search directory');
+        form.className = 'toolbar-search';
+        form.appendChild(input);
+        toolbar.appendChild(form);
 
         // Line spacing toggle
         const spacingToggle = document.createElement('button');
@@ -183,8 +192,6 @@
 
         createBreadcrumbs();
 
-        controls.className = 'directory-controls';
-
         // Theme toggle with Auto/Light/Dark modes (icon-based)
         themeToggle.type = 'button';
         themeToggle.className = 'theme-toggle';
@@ -214,21 +221,6 @@
 
         // Insert toolbar at top of body
         document.body.insertBefore(toolbar, document.body.firstChild);
-
-        // Search input
-        input.name = 'filter';
-        input.id = 'search';
-        input.type = 'search';
-        input.placeholder = 'Type to search...';
-        input.setAttribute('aria-label', 'Search directory');
-        form.appendChild(input);
-        controls.appendChild(form);
-
-        if (heading?.parentNode) {
-                heading.after(controls);
-        } else {
-                document.body.insertBefore(controls, toolbar.nextSibling);
-        }
 
         const listItems = tbody ? Array.from(tbody.querySelectorAll('tr')) : [];
         let filteredItems = [...listItems];
@@ -351,16 +343,22 @@
                         }
                 });
 
-                // Update pagination
-                const existingPagination = table?.parentNode.querySelector('.pagination');
-                if (existingPagination) {
-                        existingPagination.remove();
-                }
+                // Remove existing pagination (both top and bottom)
+                const existingPaginations = table?.parentNode.querySelectorAll('.pagination');
+                existingPaginations?.forEach(p => p.remove());
 
                 if (filteredItems.length > ITEMS_PER_PAGE) {
-                        const pagination = createPagination();
-                        if (pagination && table) {
-                                table.after(pagination);
+                        // Add pagination at top (before table)
+                        const topPagination = createPagination();
+                        if (topPagination && table) {
+                                topPagination.classList.add('pagination-top');
+                                table.before(topPagination);
+                        }
+
+                        // Add pagination at bottom (after table)
+                        const bottomPagination = createPagination();
+                        if (bottomPagination && table) {
+                                table.after(bottomPagination);
                         }
                 }
 

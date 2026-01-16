@@ -9,6 +9,7 @@
         'use strict';
 
         const THEME_STORAGE_KEY = 'fancyindex-theme';
+        const SPACING_STORAGE_KEY = 'fancyindex-spacing';
         const ITEMS_PER_PAGE = 100;
 
         // Register Service Worker for offline support
@@ -27,6 +28,66 @@
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
         const table = document.querySelector('#list');
         const tbody = table?.querySelector('tbody');
+
+        // Create top toolbar for theme and spacing toggles
+        const toolbar = document.createElement('div');
+        toolbar.className = 'top-toolbar';
+
+        // Line spacing toggle
+        const spacingToggle = document.createElement('button');
+        spacingToggle.type = 'button';
+        spacingToggle.className = 'spacing-toggle';
+        spacingToggle.setAttribute('aria-label', 'Change line spacing');
+
+        const spacingOptions = ['compact', 'normal', 'comfortable'];
+        const spacingIcons = { compact: '≡', normal: '☰', comfortable: '═' };
+        const spacingLabels = { compact: 'Compact spacing', normal: 'Normal spacing', comfortable: 'Comfortable spacing' };
+        let currentSpacingIndex = 1; // Default to normal
+
+        function updateSpacingButton() {
+                const spacing = spacingOptions[currentSpacingIndex];
+                spacingToggle.innerHTML = spacingIcons[spacing];
+                spacingToggle.title = spacingLabels[spacing];
+                spacingToggle.setAttribute('data-spacing', spacing);
+        }
+
+        function applySpacing(spacing) {
+                body.classList.remove('spacing-compact', 'spacing-normal', 'spacing-comfortable');
+                body.classList.add(`spacing-${spacing}`);
+        }
+
+        function getStoredSpacing() {
+                try {
+                        return localStorage.getItem(SPACING_STORAGE_KEY) || 'normal';
+                } catch (error) {
+                        return 'normal';
+                }
+        }
+
+        function storeSpacing(spacing) {
+                try {
+                        localStorage.setItem(SPACING_STORAGE_KEY, spacing);
+                } catch (error) {
+                        // Storage not available
+                }
+        }
+
+        spacingToggle.addEventListener('click', () => {
+                currentSpacingIndex = (currentSpacingIndex + 1) % 3;
+                const spacing = spacingOptions[currentSpacingIndex];
+                storeSpacing(spacing);
+                applySpacing(spacing);
+                updateSpacingButton();
+        });
+
+        // Initialize spacing
+        const storedSpacing = getStoredSpacing();
+        currentSpacingIndex = spacingOptions.indexOf(storedSpacing);
+        if (currentSpacingIndex === -1) currentSpacingIndex = 1;
+        applySpacing(storedSpacing);
+        updateSpacingButton();
+
+        toolbar.appendChild(spacingToggle);
 
         // Create breadcrumb navigation from h1
         function createBreadcrumbs() {
@@ -124,18 +185,20 @@
 
         controls.className = 'directory-controls';
 
-        // Theme toggle with Auto/Light/Dark modes
+        // Theme toggle with Auto/Light/Dark modes (icon-based)
         themeToggle.type = 'button';
         themeToggle.className = 'theme-toggle';
         themeToggle.setAttribute('aria-label', 'Change theme');
 
         const themeOptions = ['auto', 'light', 'dark'];
+        const themeIcons = { auto: '◐', light: '☀', dark: '☾' };
+        const themeLabels = { auto: 'Auto theme', light: 'Light theme', dark: 'Dark theme' };
         let currentThemeIndex = 0;
 
         function updateThemeButton() {
                 const theme = themeOptions[currentThemeIndex];
-                const labels = { auto: 'Auto', light: 'Light', dark: 'Dark' };
-                themeToggle.textContent = labels[theme];
+                themeToggle.innerHTML = themeIcons[theme];
+                themeToggle.title = themeLabels[theme];
                 themeToggle.setAttribute('data-theme', theme);
         }
 
@@ -147,7 +210,10 @@
                 updateThemeButton();
         });
 
-        controls.appendChild(themeToggle);
+        toolbar.appendChild(themeToggle);
+
+        // Insert toolbar at top of body
+        document.body.insertBefore(toolbar, document.body.firstChild);
 
         // Search input
         input.name = 'filter';
@@ -161,7 +227,7 @@
         if (heading?.parentNode) {
                 heading.after(controls);
         } else {
-                document.body.insertBefore(controls, document.body.firstChild);
+                document.body.insertBefore(controls, toolbar.nextSibling);
         }
 
         const listItems = tbody ? Array.from(tbody.querySelectorAll('tr')) : [];

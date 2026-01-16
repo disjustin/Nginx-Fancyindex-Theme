@@ -140,7 +140,18 @@ h1 {
 }
 
 /* =========================
-   Directory header: search + theme toggle container
+   Top toolbar: spacing + theme toggles
+   ========================= */
+.top-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        margin-bottom: 0.5rem;
+}
+
+/* =========================
+   Directory header: search container
    ========================= */
 .directory-controls {
         display: flex;
@@ -187,34 +198,42 @@ a.clear:hover {
 }
 
 /* =========================
-   Theme toggle button
+   Toolbar toggle buttons (theme + spacing)
    ========================= */
-.theme-toggle {
+.theme-toggle,
+.spacing-toggle {
         appearance: none;
-        border-radius: 999px;                               /* pill */
+        border-radius: 50%;
         border: 1px solid var(--toggle-border);
         background: var(--toggle-bg);
         color: var(--toggle-fg);
-        padding: 0.35rem 1.2rem;
-        font: 500 0.9rem/1.2 'Roboto', system-ui, sans-serif;
+        width: 2.25rem;
+        height: 2.25rem;
+        padding: 0;
+        font-size: 1.1rem;
+        line-height: 1;
         cursor: pointer;
         transition: background-color 150ms ease-in, transform 150ms ease-in;
         display: inline-flex;
         align-items: center;
-        gap: 0.45rem;                                       /* icon/text spacing */
+        justify-content: center;
 }
 
-.theme-toggle:hover {
+.theme-toggle:hover,
+.spacing-toggle:hover {
         background: var(--toggle-hover-bg);
+        transform: scale(1.05);
 }
 
-.theme-toggle:focus-visible {
+.theme-toggle:focus-visible,
+.spacing-toggle:focus-visible {
         outline: none;
-        box-shadow: var(--focus);                           /* tokenized focus ring */
+        box-shadow: var(--focus);
 }
 
-.theme-toggle[aria-pressed="true"] {
-        font-weight: 600;                                   /* pressed state emphasis */
+.theme-toggle:active,
+.spacing-toggle:active {
+        transform: scale(0.95);
 }
 
 /* =========================
@@ -735,4 +754,34 @@ footer a {
                 margin-left: 0;
                 margin-top: 0.5rem;
         }
+}
+
+/* =========================
+   Line spacing modes
+   ========================= */
+body.spacing-compact td {
+        padding-top: 6px;
+        padding-bottom: 6px;
+}
+
+body.spacing-compact {
+        line-height: 1.3;
+}
+
+body.spacing-normal td {
+        padding-top: 14px;
+        padding-bottom: 14px;
+}
+
+body.spacing-normal {
+        line-height: 1.6;
+}
+
+body.spacing-comfortable td {
+        padding-top: 22px;
+        padding-bottom: 22px;
+}
+
+body.spacing-comfortable {
+        line-height: 1.9;
 }

@@ -29,6 +29,10 @@ A responsive theme for [Nginx](https://www.nginx.org/) [Fancyindex module](https
 ...
 http {
     ...
+    # Set UTF-8 charset for text files
+    charset utf-8;
+    charset_types text/plain text/html text/css text/xml application/javascript application/json;
+
     server {
         listen 80;
         server_name X.X.X.X;
@@ -43,6 +47,11 @@ http {
             fancyindex_footer "/Nginx-Fancyindex/footer.html";
             fancyindex_name_length 255;
             ...
+        }
+
+        # Cache static theme assets
+        location ^~ /Nginx-Fancyindex/ {
+            add_header Cache-Control "public, max-age=31536000, immutable";
         }
     }
 }
@@ -75,6 +84,24 @@ fancyindex_footer "/Nginx-Fancyindex/footer.html";
 fancyindex_ignore "examplefile.html";
 # Making sure folder where these files are do not show up in the listing.
 fancyindex_ignore "Nginx-Fancyindex";
+```
+
+### Recommended Headers
+
+For proper character encoding and caching, add these directives to your `http` block:
+
+```conf
+# UTF-8 charset for proper text rendering
+charset utf-8;
+charset_types text/plain text/html text/css text/xml application/javascript application/json;
+```
+
+For caching static theme assets, add a location block:
+
+```conf
+location ^~ /Nginx-Fancyindex/ {
+    add_header Cache-Control "public, max-age=31536000, immutable";
+}
 ```
 
 ## Javascript Explanation

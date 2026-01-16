@@ -32,7 +32,17 @@
         const toolbar = document.createElement('div');
         toolbar.className = 'top-toolbar';
 
-        // Search input (added to toolbar)
+        // Title on left side
+        const toolbarTitle = document.createElement('span');
+        toolbarTitle.className = 'toolbar-title';
+        toolbarTitle.textContent = 'Nginx Static File Server';
+        toolbar.appendChild(toolbarTitle);
+
+        // Right side controls container
+        const toolbarControls = document.createElement('div');
+        toolbarControls.className = 'toolbar-controls';
+
+        // Search input (added to toolbar controls)
         input.name = 'filter';
         input.id = 'search';
         input.type = 'search';
@@ -40,7 +50,7 @@
         input.setAttribute('aria-label', 'Search directory');
         form.className = 'toolbar-search';
         form.appendChild(input);
-        toolbar.appendChild(form);
+        toolbarControls.appendChild(form);
 
         // Line spacing toggle
         const spacingToggle = document.createElement('button');
@@ -96,7 +106,7 @@
         applySpacing(storedSpacing);
         updateSpacingButton();
 
-        toolbar.appendChild(spacingToggle);
+        toolbarControls.appendChild(spacingToggle);
 
         // Create breadcrumb navigation from h1
         function createBreadcrumbs() {
@@ -115,11 +125,11 @@
                 const breadcrumbList = document.createElement('ol');
                 breadcrumbList.className = 'breadcrumb';
 
-                // Add root
+                // Add root (using hostname)
                 const rootLi = document.createElement('li');
                 const rootLink = document.createElement('a');
                 rootLink.href = '/';
-                rootLink.textContent = 'Root';
+                rootLink.textContent = window.location.hostname;
                 rootLi.appendChild(rootLink);
                 breadcrumbList.appendChild(rootLi);
 
@@ -217,7 +227,8 @@
                 updateThemeButton();
         });
 
-        toolbar.appendChild(themeToggle);
+        toolbarControls.appendChild(themeToggle);
+        toolbar.appendChild(toolbarControls);
 
         // Insert toolbar at top of body
         document.body.insertBefore(toolbar, document.body.firstChild);

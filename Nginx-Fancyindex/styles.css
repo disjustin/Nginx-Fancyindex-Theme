@@ -53,7 +53,7 @@ html {
         --muted: #5e6877;                 /* secondary text */
         --row-hover: #eef1f8;             /* table row hover */
         --rule: #d7dde6;                  /* borders / rules */
-        --accent: #2d6cdf;                /* accent + links */
+        --accent: #1a4d8f;                /* accent + links (darker for better visibility) */
         --focus: 0 0 0 3px rgba(45, 108, 223, 0.25); /* focus ring shadow */
         --link: var(--accent);              /* primary link color */
         --clear-link: var(--muted);         /* subtle action links */
@@ -105,7 +105,7 @@ body.theme-dark {
 html {
         font-family: system-ui, -apple-system, 'Segoe UI', Ubuntu, Cantarell, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
         color: var(--muted);                                /* default text color (secondary) */
-        font-weight: 300;
+        font-weight: 400;
         font-size: clamp(14px, 1.2vw, 16px);                /* fluid base size */
         line-height: 1.6;                                   /* TO DO: 1.6x font height is "confortable", add toggle for condensed ~1.2*/
         text-size-adjust: 100%;
@@ -127,12 +127,12 @@ body {
    Headings and table headers
    ========================= */
 thead {
-        font-weight: 200;
+        font-weight: 400;
         font-size: 1.2em;
 }
 
 h1 {
-        font-weight: 300;
+        font-weight: 500;
         text-align: center;
         font-size: clamp(1.5rem, 2vw + 1rem, 2.4rem);
         line-height: 1.4;
@@ -230,7 +230,7 @@ input {
         background-color: var(--bg-elev);
         border: 1px solid var(--input-border);
         border-radius: 6px;
-        font: 300 0.95rem/1.2 'Roboto', system-ui, sans-serif;
+        font: 400 0.95rem/1.2 'Roboto', system-ui, sans-serif;
         transition: border-color 150ms ease-in, box-shadow 150ms ease-in;
 }
 input:focus-visible {

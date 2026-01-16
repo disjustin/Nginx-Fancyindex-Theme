@@ -32,7 +32,7 @@
         function createBreadcrumbs() {
                 if (!heading) return;
 
-                const pathText = heading.textContent.replace('Directory:', '').trim();
+                const pathText = heading.textContent.trim();
                 if (!pathText || pathText === '/') return;
 
                 const breadcrumbNav = document.createElement('nav');
@@ -116,7 +116,7 @@
                 });
 
                 breadcrumbNav.appendChild(copyBtn);
-                heading.textContent = 'Directory';
+                heading.style.display = 'none';
                 heading.after(breadcrumbNav);
         }
 

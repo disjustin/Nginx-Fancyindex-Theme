@@ -233,6 +233,77 @@
         // Insert toolbar at top of body
         document.body.insertBefore(toolbar, document.body.firstChild);
 
+        // Enhanced column sorting
+        function enhanceColumnSorting() {
+                const thead = table?.querySelector('thead');
+                if (!thead) return;
+
+                const headerCells = thead.querySelectorAll('th');
+                const urlParams = new URLSearchParams(window.location.search);
+                const currentSortCol = urlParams.get('C') || 'M'; // Default: Date (M=Modified)
+                const currentSortOrder = urlParams.get('O') || 'D'; // Default: Descending
+
+                // Column mapping: nginx fancyindex uses N=Name, M=Modified, S=Size
+                const columnMap = {
+                        0: 'N', // Name
+                        1: 'S', // Size
+                        2: 'M', // Date/Modified
+                        3: null // Description (no sort)
+                };
+
+                headerCells.forEach((th, index) => {
+                        const link = th.querySelector('a');
+                        if (!link) return;
+
+                        const colCode = columnMap[index];
+                        if (!colCode) return; // Skip non-sortable columns
+
+                        // Parse the existing link URL
+                        const linkUrl = new URL(link.href, window.location.origin);
+                        const linkParams = new URLSearchParams(linkUrl.search);
+                        const linkCol = linkParams.get('C');
+
+                        // Get the column name text
+                        const columnName = link.textContent.trim();
+
+                        // Determine if this column is currently sorted
+                        const isActive = currentSortCol === colCode;
+
+                        // Determine sort direction for this column's button
+                        let nextOrder = 'A'; // Default to ascending
+                        if (isActive) {
+                                // Toggle: if currently ascending, next is descending
+                                nextOrder = currentSortOrder === 'A' ? 'D' : 'A';
+                        }
+
+                        // Create new structure: text span + sort button
+                        th.innerHTML = '';
+                        th.className = isActive ? 'sort-active' : '';
+
+                        const textSpan = document.createElement('span');
+                        textSpan.className = 'column-name';
+                        textSpan.textContent = columnName;
+                        th.appendChild(textSpan);
+
+                        const sortBtn = document.createElement('a');
+                        sortBtn.className = 'sort-btn' + (isActive ? ' active' : '');
+                        sortBtn.href = `?C=${colCode}&O=${nextOrder}`;
+                        sortBtn.title = `Sort by ${columnName} (${nextOrder === 'A' ? 'ascending' : 'descending'})`;
+                        sortBtn.setAttribute('aria-label', `Sort by ${columnName}`);
+
+                        // Arrow indicates current state if active, otherwise shows ascending
+                        if (isActive) {
+                                sortBtn.innerHTML = currentSortOrder === 'A' ? '↑' : '↓';
+                        } else {
+                                sortBtn.innerHTML = '↕';
+                        }
+
+                        th.appendChild(sortBtn);
+                });
+        }
+
+        enhanceColumnSorting();
+
         const listItems = tbody ? Array.from(tbody.querySelectorAll('tr')) : [];
         let filteredItems = [...listItems];
         let currentPage = 1;

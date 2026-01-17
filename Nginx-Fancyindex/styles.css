@@ -316,6 +316,56 @@ body.theme-dark th {
         background: #1f222b;
 }
 
+/* Column header layout: name + sort button */
+th {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+}
+
+th.sort-active {
+        color: var(--accent);
+        font-weight: 500;
+}
+
+body.theme-dark th.sort-active {
+        color: var(--fg);
+}
+
+.column-name {
+        flex: 1;
+}
+
+.sort-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 4px;
+        background: transparent;
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.9em;
+        transition: background-color 150ms ease-in, color 150ms ease-in;
+}
+
+.sort-btn:hover {
+        background: var(--row-hover);
+        color: var(--fg);
+        text-decoration: none;
+}
+
+.sort-btn.active {
+        color: var(--accent);
+        font-weight: 600;
+}
+
+body.theme-dark .sort-btn.active {
+        color: var(--fg);
+}
+
 th + th {
         width: 25%;                                         /* constrain mid columns */
 }
@@ -333,9 +383,13 @@ td {
         transition: background 300ms ease-in;
 }
 
-td:last-child,
-th:last-child {
+td:last-child {
         text-align: right;                                  /* align trailing numeric data */
+        padding-right: 10px;
+}
+
+th:last-child {
+        justify-content: flex-end;                          /* align last column header right */
         padding-right: 10px;
 }
 

@@ -1,7 +1,7 @@
 // Service Worker for Nginx-Fancyindex-Theme
 // Provides offline support and faster repeat visits
 
-const CACHE_NAME = 'nginx-fancyindex-v1';
+const CACHE_NAME = 'nginx-fancyindex-v2';
 const STATIC_ASSETS = [
     '/Nginx-Fancyindex/styles.css',
     '/Nginx-Fancyindex/addNginxFancyIndexForm.js',
